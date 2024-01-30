@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mappák</title>
+</head>
+<style>
+
+    body{
+        background-color: honeydew;
+    }
+
+    .game{
+        width: 742px;
+        margin: auto;
+        background-color: lightgray;
+        padding: 10px;
+        border: 1px solid black;
+    }
+
+    #pane{
+        width: 720px;
+        background-color: white;
+        border: 1px solid gray;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    #pane img{
+        padding: 2px;
+        margin: 1px;
+        border: 1px solid white;
+    }
+
+    #pane img:hover{
+        border: 1px solid red;
+    }
+
+    #counters{
+        font-size: 15pt;
+        font-weight: bold;
+        font-family: Tahoma;
+    }
+    #counters img{
+        vertical-align: middle;
+    }
+
+    #next_kep{
+        margin-left: 148px;
+    }
+
+
+</style>
+<script>
+
+    const items = []
+    const selection = ["lakat","papir","pendrive","toll"]
+    let next = 0
+    let lakatcount = 0
+    let papircount = 0
+    let pendrivecount = 0
+    let tollcount = 0
+
+    function start() {
+       reset() 
+    }
+
+    function rand() {
+        return Math.floor(Math.random()*4)
+    }
+
+    function reset() {
+        let html = ""
+        for(let i = 0; i < 70; i++){
+            items[i] = -1
+            html += "<img id='"+i+"' onclick='katt("+i+")' src='icons/semmi.png'>"
+        }
+        lakatcount = 0
+        papircount = 0
+        pendrivecount = 0
+        tollcount = 0
+        document.getElementById("pane").innerHTML=html
+        next = rand()
+        document.getElementById("next_kep").src = "icons/"+selection[next]+".png"
+        document.getElementById("lakat_counter").innerHTML = lakatcount+" db"
+        document.getElementById("papir_counter").innerHTML = papircount+" db"
+        document.getElementById("pendrive_counter").innerHTML = pendrivecount+" db"
+        document.getElementById("toll_counter").innerHTML = tollcount+" db"
+        if(lakatcount < 10) document.getElementById("lakat_counter").innerHTML = "0" + lakatcount+" db"
+        if(papircount < 10) document.getElementById("papir_counter").innerHTML = "0" + papircount+" db"
+        if(pendrivecount < 10) document.getElementById("pendrive_counter").innerHTML = "0" + pendrivecount+" db"
+        if(tollcount < 10) document.getElementById("toll_counter").innerHTML = "0" + tollcount+" db"
+    }
+
+    function katt(index) {
+        if(items[index] != -1){
+            let temp = next
+            next = items[index]
+            items[index] = temp
+            document.getElementById(index).src = "icons/"+selection[items[index]]+".png"
+            document.getElementById("next_kep").src = "icons/"+selection[next]+".png"
+        }else{
+            items[index] = next
+            document.getElementById(index).src = "icons/"+selection[next]+".png"
+            next = rand()
+            document.getElementById("next_kep").src = "icons/"+selection[next]+".png"
+        }
+        count()
+    }
+
+    function count() {
+        lakatcount = 0
+        papircount = 0
+        pendrivecount = 0
+        tollcount = 0
+        for(let i of items){
+            if(i != -1){
+                if(i == 0) lakatcount++
+                else if(i == 1) papircount++
+                else if(i == 2) pendrivecount++
+                else tollcount++
+            }
+        }
+        document.getElementById("lakat_counter").innerHTML = lakatcount+" db"
+        document.getElementById("papir_counter").innerHTML = papircount+" db"
+        document.getElementById("pendrive_counter").innerHTML = pendrivecount+" db"
+        document.getElementById("toll_counter").innerHTML = tollcount+" db"
+        if(lakatcount < 10) document.getElementById("lakat_counter").innerHTML = "0" + lakatcount+" db"
+        if(papircount < 10) document.getElementById("papir_counter").innerHTML = "0" + papircount+" db"
+        if(pendrivecount < 10) document.getElementById("pendrive_counter").innerHTML = "0" + pendrivecount+" db"
+        if(tollcount < 10) document.getElementById("toll_counter").innerHTML = "0" + tollcount+" db"
+        
+    }
+
+</script>
+<body onload="start()">
+    
+
+
+    <div class="game">
+        <div id="pane">
+
+        </div>
+        <div id="counters">
+            <img src="icons/lakat.png">
+            <span id="lakat_counter" >00 db</span>
+            <img src="icons/papir.png">
+            <span id="papir_counter" >00 db</span>
+            <img src="icons/pendrive.png">
+            <span id="pendrive_counter" >00 db</span>
+            <img src="icons/toll.png">
+            <span id="toll_counter" >00 db</span>
+            <img id="next_kep" onmouseover="this.src='icons/semmi.png'" onmouseleave="this.src='icons/'+selection[next]+'.png'" onclick="reset()" src="icons/semmi.png">
+        </div>
+    </div>
+
+</body>
+</html>
